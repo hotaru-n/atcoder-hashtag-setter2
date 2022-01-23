@@ -6,7 +6,6 @@
     "rootDir": "./src",
     "outDir": "./dist",
     "strict": true,
-    "alwaysStrict": false,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
