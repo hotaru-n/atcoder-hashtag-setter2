@@ -19,6 +19,7 @@
 /** ページタイプ型のリテラル 問題ページ、順位表ページなどを意味する */
 const pageTypes = [
   "tasks",
+  "task",
   "clarifications",
   "submit",
   "submissions",
@@ -34,6 +35,7 @@ const pageTypes = [
  * ページタイプ型
  * 例: tasks, submissions, standings, ...
  * 提出詳細ページはsubmission
+ * 個別の問題ページはtask
  * コンテストのトップまたは想定外ならundefined
  * その他はURLの6番目の文字列
  */
@@ -65,7 +67,7 @@ type Info = {
 function getInfo() {
   /** コンテスト名 例: AtCoder Beginner Contest 210 */
   const contestTitle: Info["contestTitle"] =
-    document.getElementsByClassName("contest-title")[0].textContent ?? "";
+    document.getElementsByClassName("contest-title")[0]?.textContent ?? "";
 
   /**
    * ページのURL \
@@ -77,10 +79,12 @@ function getInfo() {
   const contestId = url[4];
 
   /**ページタイプ 例: tasks, submissions, standings, ... */
-  const pageType = (() => {
+  const pageType = ((): pageType => {
     if (url.length < 6) return undefined;
     if (!isPageType(url[5])) return undefined;
-    if (url.length >= 7 && url[6] !== "me") return "submission";
+    if (url.length >= 7 && url[5] === "submissions" && url[6] !== "me")
+      return "submission";
+    if (url.length >= 7 && url[5] === "tasks") return "task";
     return url[5];
   })();
 
@@ -94,13 +98,13 @@ function getInfo() {
   } => {
     // urlの長さが7未満のとき 下記の問題ID、問題名が無いページ
     if (url.length < 7) return { taskId: undefined, taskTitle: undefined };
-    if (pageType === "tasks") {
+    if (pageType === "task") {
       // 問題ページのとき
       // URLに含まれる問題ID、問題名を返す
 
       const taskTitle = document
         .getElementsByClassName("h2")[0]
-        .textContent?.trim()
+        ?.textContent?.trim()
         .replace(/\n.*/i, "");
 
       return { taskId: url[6], taskTitle: taskTitle };
@@ -119,7 +123,9 @@ function getInfo() {
         if (typeof text === "string") return ["問題", "Task"].includes(text);
         return false;
       })[0];
+      if (!taskCell) return { taskId: undefined, taskTitle: undefined };
       const taskLink = taskCell.getElementsByTagName("a")[0];
+      if (!taskLink) return { taskId: undefined, taskTitle: undefined };
 
       // URLに含まれる問題ID、問題名を返す
       const taskURLParsed = parseURL(taskLink.href);
@@ -140,7 +146,8 @@ function getInfo() {
 
     // テーブル要素集合
     const thTags = document.getElementsByTagName("td");
-    const thTagsArray = Array.prototype.slice.call(thTags);
+    const thTagsArray: HTMLTableCellElement[] =
+      Array.prototype.slice.call(thTags);
 
     // ユーザーの表セル要素（前の要素のテキストが`ユーザ`の要素）を探す
     const userCell = thTagsArray.filter((elem: HTMLTableCellElement) => {
@@ -149,8 +156,9 @@ function getInfo() {
       if (typeof text === "string") return ["ユーザ", "User"].includes(text);
       return false;
     })[0];
+    if (!userCell) return undefined;
 
-    return userCell.textContent.trim();
+    return userCell?.textContent?.trim();
   })();
 
   /** 提出結果 例: AC */
@@ -160,7 +168,8 @@ function getInfo() {
 
     // テーブル要素集合
     const thTags = document.getElementsByTagName("td");
-    const thTagsArray = Array.prototype.slice.call(thTags);
+    const thTagsArray: HTMLTableCellElement[] =
+      Array.prototype.slice.call(thTags);
 
     // 結果の表セル要素（前の要素のテキストが`結果`の要素）を探す
     const statusCell = thTagsArray.filter((elem: HTMLTableCellElement) => {
@@ -169,8 +178,9 @@ function getInfo() {
       if (typeof text === "string") return ["結果", "Status"].includes(text);
       return false;
     })[0];
+    if (!statusCell) return undefined;
 
-    return statusCell.textContent.trim();
+    return statusCell?.textContent?.trim();
   })();
 
   return {
