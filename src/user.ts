@@ -216,7 +216,7 @@ window.addEventListener("load", function () {
  * in:  https://atcoder.jp/contests/abc210?lang=en \
  * out: (5)['https:', '', 'atcoder.jp', 'contests', 'abc210']
  */
-function parseURL(url: String) {
+function parseURL(url: string) {
   // 区切り文字`/`で分割する
   // ?以降の文字列を削除してパラメータを削除する
   return url.split("/").map((x) => x.replace(/\?.*/i, ""));
