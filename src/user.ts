@@ -194,29 +194,68 @@ function getInfo() {
   };
 }
 
+/**
+ * ツイートボタンのテキストを取得する
+ */
+function getTweetButtonText() {
+  /** ツイートボタンのHTML要素 */
+  const a2a_kit = document.getElementsByClassName("a2a_kit")[0];
+  if (!a2a_kit) return;
+  /** ツイートボタンのテキスト */
+  const a2a_title = a2a_kit.getAttribute("data-a2a-title");
+  return a2a_title;
+}
+
+/**
+ * ツイートボタンのテキストを変更する
+ */
+function setTweetButtonText(text: string) {
+  /** ツイートボタンのHTML要素 */
+  const a2a_kit = document.getElementsByClassName("a2a_kit")[0];
+  if (!a2a_kit) return "";
+  a2a_kit.setAttribute("data-a2a-title", text);
+  // TODO: デバッグ用
+  console.log("tweet text :>> ", getTweetButtonText());
+  return getTweetButtonText();
+}
+
 window.addEventListener("load", function () {
   const info = getInfo();
   // TODO: デバッグ用
   console.log("info :>> ", info);
 
-  // /** コンテストハッシュタグ 例: #AtCoder_abc210_a */
-  // const contestHashtag = ` #AtCoder_${contestId}`;
-  // /** 問題ハッシュタグ 例: #AtCoder_abc210_a */
-  // const taskHashtag = taskId !== "" ? ` #AtCoder_${taskId}` : "";
+  /** コンテストハッシュタグ 例: #AtCoder_abc210_a */
+  const contestHashtag = info.contestId ? ` #AtCoder_${info.contestId}` : "";
+  /** 問題ハッシュタグ 例: #AtCoder_abc210_a */
+  const taskHashtag = info.taskId ? ` #AtCoder_${info.taskId}` : "";
 
-  // // ツイートボタンのテキストにハッシュタグを追加する
-  // /** ツイートボタンのHTML要素 */
-  // const a2a_kit = this.document.getElementsByClassName("a2a_kit")[0];
-  // /** ツイートボタンのテキスト */
-  // const a2a_title = a2a_kit.getAttribute("data-a2a-title");
-  // a2a_kit.setAttribute(
-  //   "data-a2a-title",
-  //   taskTitle + a2a_title + contestHashtag + taskHashtag
-  // );
+  // ツイートボタンのテキストを取得する
+  const text = getTweetButtonText();
+  if (!text) return;
 
-  // const a2a_title_new = a2a_kit.getAttribute("data-a2a-title");
-  // console.log("tweet text\n", a2a_title_new);
-  // console.log(taskTitle);
+  // ページに合わせてテキストを編集する
+  let newText = "";
+  if (info.pageType === "task") {
+    // 個別の問題ページ
+    // 例: A - Cabbages - AtCoder Beginner Contest 210 #AtCoder_abc210_a #AtCoder_abc210
+    newText = text + " - " + info.contestTitle + taskHashtag + contestHashtag;
+  } else if (info.pageType === "submission") {
+    // 提出詳細ページ
+    // 例: 提出 #24282585 - A - Cabbages - AtCoder Beginner Contest 210 #AtCoder_abc210_a #AtCoder_abc210
+    newText =
+      text.replace(
+        info.contestTitle,
+        `${info.taskTitle ?? ""} - ${info.contestTitle}`
+      ) +
+      taskHashtag +
+      contestHashtag;
+  } else {
+    // その他のページ
+    // 例: 順位表 - AtCoder Beginner Contest 210 #AtCoder_abc210
+    newText = text + contestHashtag;
+  }
+
+  setTweetButtonText(newText);
 });
 
 /**
