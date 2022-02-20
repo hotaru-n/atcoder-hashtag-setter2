@@ -1,17 +1,15 @@
 // ==UserScript==
-// @name            AtCoder HashTag Setter2
-// @namespace       https://github.com/hotarunx
-// @version         1.0.0
-// @description     ツイートボタンの埋め込みテキストに情報を追加します
-// @author          hotarunx
-// @match           https://atcoder.jp/contests/*
-// @exclude         https://atcoder.jp/contests/
-// @grant           none
-// @license         MIT
-//
-// Copyright(c) 2020 hotarunx
-// This software is released under the MIT License, see LICENSE or https://github.com/hotarunx/AtCoderMyExtensions/blob/master/LICENSE.
-//
+// @name         AtCoder HashTag Setter2
+// @namespace    https://github.com/hotarunx
+// @homepage     https://github.com/hotarunx/atcoder-hashtag-setter2
+// @supportURL   https://github.com/hotarunx/atcoder-hashtag-setter2/issues
+// @version      1.0.0
+// @description  ツイートボタンの埋め込みテキストに情報を追加します
+// @author       hotarunx
+// @match        https://atcoder.jp/contests/*
+// @exclude      https://atcoder.jp/contests/
+// @grant        none
+// @license      MIT
 // ==/UserScript==
 
 "use strict";
@@ -58,6 +56,8 @@ type Info = {
   taskId: string | undefined;
   submissionsUser: string | undefined;
   judgeStatus: string;
+  
+  score: string;
 };
 
 /**
@@ -183,6 +183,28 @@ function getInfo() {
     return statusCell?.textContent?.trim();
   })();
 
+  /** 得点 例: 100 */
+  const score = (() => {
+    if (pageType !== "submission") return undefined;
+    // 提出詳細ページのとき
+
+    // テーブル要素集合
+    const thTags = document.getElementsByTagName("td");
+    const thTagsArray: HTMLTableCellElement[] =
+      Array.prototype.slice.call(thTags);
+
+    // 得点の表セル要素（前の要素のテキストが`得点`の要素）を探す
+    const scoreCell = thTagsArray.filter((elem: HTMLTableCellElement) => {
+      const prevElem = elem.previousElementSibling;
+      const text = prevElem?.textContent;
+      if (typeof text === "string") return ["得点", "Score"].includes(text);
+      return false;
+    })[0];
+    if (!scoreCell) return undefined;
+
+    return scoreCell?.textContent?.trim();
+  })();
+
   return {
     contestTitle,
     contestId,
@@ -191,6 +213,7 @@ function getInfo() {
     taskId,
     submissionsUser,
     judgeStatus,
+    score,
   };
 }
 
@@ -219,6 +242,7 @@ function setTweetButtonText(text: string) {
   return getTweetButtonText();
 }
 
+// メイン処理
 window.addEventListener("load", function () {
   const info = getInfo();
   // TODO: デバッグ用
@@ -235,21 +259,53 @@ window.addEventListener("load", function () {
 
   // ページに合わせてテキストを編集する
   let newText = "";
-  if (info.pageType === "task") {
-    // 個別の問題ページ
-    // 例: A - Cabbages - AtCoder Beginner Contest 210 #AtCoder_abc210_a #AtCoder_abc210
-    newText = text + " - " + info.contestTitle + taskHashtag + contestHashtag;
-  } else if (info.pageType === "submission") {
-    // 提出詳細ページ
-    // 例: 提出 #24282585 - A - Cabbages - AtCoder Beginner Contest 210 #AtCoder_abc210_a #AtCoder_abc210
-    newText =
-      text.replace(
-        info.contestTitle,
-        `${info.taskTitle ?? ""} - ${info.contestTitle}`
-      ) +
-      taskHashtag +
-      contestHashtag;
+
+  // コンテストが終了しているまたは常設中のコンテストか判定
+  // コンテスト終了前にコンテストの情報をツイートボタンに含めることを防ぐため
+  if (isContestOverOrPermanent(info.contestId ?? "")) {
+    // コンテストが終了しているまたは常設中のコンテスト
+    if (info.pageType === "task") {
+      // 個別の問題ページ
+      // 例: A - Cabbages - AtCoder Beginner Contest 210 #AtCoder_abc210_a #AtCoder_abc210
+      newText = text + " - " + info.contestTitle + taskHashtag + contestHashtag;
+    } else if (info.pageType === "submission") {
+      // 提出詳細ページ
+      // 例: machikaneさんのA - Cabbagesへの提出 #24282585
+      // 結果：AC
+      // 得点：100
+      // AtCoder Beginner Contest 210 #AtCoder_abc210_a #AtCoder_abc210
+
+      // @ts-ignore
+      if (LANG === "ja") {
+        // 日本語
+        newText =
+          `${info.submissionsUser}さんの${info.taskTitle}への` +
+          text.replace(
+            " - " + info.contestTitle,
+            `\n結果：${info.judgeStatus}\n得点：${info.score}\n${info.contestTitle}`
+          ) +
+          taskHashtag +
+          contestHashtag;
+      } else {
+        // 英語
+        newText =
+          `${info.submissionsUser}'s ` +
+          text.replace(
+            " - " + info.contestTitle,
+            ` to ${info.taskTitle}\nStatus: ${info.judgeStatus}\nScore: ${info.score}\n${info.contestTitle}`
+          ) +
+          taskHashtag +
+          contestHashtag;
+      }
+    } else {
+      // その他のページ
+      // 例: 順位表 - AtCoder Beginner Contest 210 #AtCoder_abc210
+      newText = text + contestHashtag;
+    }
   } else {
+    // コンテストが終了していないかつ常設ではない
+    // コンテストハッシュタグを追加するだけにする
+
     // その他のページ
     // 例: 順位表 - AtCoder Beginner Contest 210 #AtCoder_abc210
     newText = text + contestHashtag;
@@ -269,4 +325,34 @@ function parseURL(url: string) {
   // 区切り文字`/`で分割する
   // ?以降の文字列を削除してパラメータを削除する
   return url.split("/").map((x) => x.replace(/\?.*/i, ""));
+}
+
+/**
+ * コンテストが終了しているかコンテストが常設コンテストであることを判定
+ *
+ * @param {string} contestId
+ */
+function isContestOverOrPermanent(contestId: string) {
+  /** 常設中のコンテスト */
+  const permanentCOntests = [
+    "practice",
+    "APG4b",
+    "abs",
+    "practice2",
+    "typical90",
+    "math-and-algorithm",
+  ];
+  // 常設中のコンテストか判定
+  if (permanentCOntests.includes(contestId)) {
+    return true;
+  }
+
+  // 現在時間（UNIX時間 + 時差）
+  const nowTime = Math.floor(Date.now() / 1000);
+  // コンテスト終了時間
+  // @ts-ignore
+  const contestEndTime = Math.floor(Date.parse(endTime._i) / 1000);
+
+  // コンテスト終了後か判定
+  return contestEndTime < nowTime;
 }

@@ -2,6 +2,8 @@
 
 AtCoderのツイートボタンのテキストにハッシュタグ + etcを追加します。
 
+問題ハッシュタグ、コンテストハッシュタグ、問題名、提出結果、得点を表示します。
+
 [AtCoder HashTag Setter](https://greasyfork.org/ja/scripts/422324-atcoder-hashtag-setter)をフルスクラッチしたスクリプトです。
 
 > AtCoderのTwitter Shareボタンの文章にハッシュタグを追加します。
@@ -12,7 +14,13 @@ AtCoderのツイートボタンのテキストにハッシュタグ + etcを追�
 
 ## ⚠️注意⚠️
 
-**コンテスト終了前に問題名、ジャッジ結果をツイートしないでください。**
+**ルールで許可されている場合を除き、コンテスト終了前に問題名、ジャッジ結果、得点をツイートしないでください。**
+
+これらはコンテストのルールに違反する可能性があります。
+
+予防策として、コンテスト終了前（常設コンテストを除く）は、ツイートボタンのテキストに問題名、ジャッジ結果、得点を含めない処理を入れています。
+
+[ルール \- AtCoder Beginner Contest 210](https://atcoder.jp/contests/abc210/rules)
 
 ## AtCoder HashTag Setterとの違い
 
@@ -25,18 +33,29 @@ AtCoderのツイートボタンのテキストにハッシュタグ + etcを追�
 
 * taskId: abc210_a
 * contestId: abc210
+* 問題ハッシュタグ： #AtCoder_abc210_a
+* コンテストハッシュタグ： #AtCoder_abc210
 
 ### 問題ページ
 
-`A - Cabbages - AtCoder Beginner Contest 210 #AtCoder_abc210_a #AtCoder_abc210`
+```text
+A - Cabbages - AtCoder Beginner Contest 210 #AtCoder_abc210_a #AtCoder_abc210
+```
 
 ### 提出詳細ページ
 
-`提出 #24282585 - A - Cabbages - AtCoder Beginner Contest 210 #AtCoder_abc210_a #AtCoder_abc210`
+```text
+machikaneさんのA - Cabbagesへの提出 #24282585
+結果：AC
+得点：100
+AtCoder Beginner Contest 210 #AtCoder_abc210_a #AtCoder_abc210
+```
 
 ### その他のページ
 
-`順位表 - AtCoder Beginner Contest 210 #AtCoder_abc210`
+```text
+順位表 - AtCoder Beginner Contest 210 #AtCoder_abc210
+```
 
 ## ライセンス
 
