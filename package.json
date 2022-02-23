@@ -6,7 +6,8 @@
     "watch": "tsc -w",
     "lint": "eslint --ignore-path .gitignore \"./src/**/*.{js,jsx,ts,tsx}\"",
     "lint:fix": "npm run lint --fix",
-    "format": "prettier --write --ignore-path .gitignore \"**/*.{css,scss,html,js,json,jsx,md,ts,tsx}\""
+    "format": "prettier --write --ignore-path .gitignore \"**/*.{css,scss,html,js,json,jsx,md,ts,tsx}\"",
+    "test": "npm run lint"
   },
   "keywords": [],
   "author": "",
