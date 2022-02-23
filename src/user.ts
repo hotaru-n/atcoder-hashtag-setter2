@@ -297,6 +297,7 @@ window.addEventListener("load", function () {
       // AtCoder Beginner Contest 210 #AtCoder_abc210_a #AtCoder_abc210
 
       // @ts-ignore
+      // eslint-disable-next-line no-undef
       if (LANG === "ja") {
         // 日本語
         newText =
@@ -363,6 +364,7 @@ function isContestOverOrPermanent(contestId: string) {
   const nowTime = Math.floor(Date.now() / 1000);
   // コンテスト終了時間
   // @ts-ignore
+  // eslint-disable-next-line no-undef
   const contestEndTime = Math.floor(Date.parse(endTime._i) / 1000);
 
   // コンテスト終了後か判定
