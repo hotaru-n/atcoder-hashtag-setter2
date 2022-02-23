@@ -14,6 +14,28 @@
 
 "use strict";
 
+// 設定*************************************************************************
+
+/**
+ * @type {boolean} ネタバレ防止機能
+ * コンテストが終了前かつ常設でないコンテストのとき
+ * ツイートボタンのテキストに問題名、ジャッジ結果、得点を含めない
+ * default: true
+ */
+const disableSpoiler: boolean = true;
+
+/** @type {string[]} 常設コンテストID一覧 ネタバレ防止機能で使う */
+const permanentContestIDs = [
+  "practice",
+  "APG4b",
+  "abs",
+  "practice2",
+  "typical90",
+  "math-and-algorithm",
+];
+
+// *****************************************************************************
+
 /** ページタイプ型のリテラル 問題ページ、順位表ページなどを意味する */
 const pageTypes = [
   "tasks",
@@ -56,7 +78,6 @@ type Info = {
   taskId: string | undefined;
   submissionsUser: string | undefined;
   judgeStatus: string;
-  
   score: string;
 };
 
@@ -262,7 +283,7 @@ window.addEventListener("load", function () {
 
   // コンテストが終了しているまたは常設中のコンテストか判定
   // コンテスト終了前にコンテストの情報をツイートボタンに含めることを防ぐため
-  if (isContestOverOrPermanent(info.contestId ?? "")) {
+  if (isContestOverOrPermanent(info.contestId ?? "") || !disableSpoiler) {
     // コンテストが終了しているまたは常設中のコンテスト
     if (info.pageType === "task") {
       // 個別の問題ページ
@@ -333,17 +354,8 @@ function parseURL(url: string) {
  * @param {string} contestId
  */
 function isContestOverOrPermanent(contestId: string) {
-  /** 常設中のコンテスト */
-  const permanentCOntests = [
-    "practice",
-    "APG4b",
-    "abs",
-    "practice2",
-    "typical90",
-    "math-and-algorithm",
-  ];
   // 常設中のコンテストか判定
-  if (permanentCOntests.includes(contestId)) {
+  if (permanentContestIDs.includes(contestId)) {
     return true;
   }
 

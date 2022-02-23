@@ -1,6 +1,6 @@
 # AtCoder HashTag Setter2
 
-AtCoderのツイートボタンのテキストにハッシュタグ + etcを追加します。
+AtCoderのツイートボタンの埋め込みテキストにハッシュタグ + etcを追加します。
 
 問題ハッシュタグ、コンテストハッシュタグ、問題名、提出結果、得点を表示します。
 
@@ -35,6 +35,8 @@ AtCoderのツイートボタンのテキストにハッシュタグ + etcを追�
 * contestId: abc210
 * 問題ハッシュタグ： #AtCoder_abc210_a
 * コンテストハッシュタグ： #AtCoder_abc210
+
+[A \- Cabbages](https://atcoder.jp/contests/abc210/tasks/abc210_a)
 
 ### 問題ページ
 
