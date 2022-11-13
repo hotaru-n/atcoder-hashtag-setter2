@@ -1,10 +1,13 @@
 # AtCoder HashTag Setter2
 
+[GitHub](https://github.com/hotarunx/atcoder-hashtag-setter2)
+[配布サイト](https://greasyfork.org/ja/scripts/440488-atcoder-hashtag-setter2)
+
 AtCoder のツイートボタンの埋め込みテキストにハッシュタグ + etc を追加します。
 
 問題ハッシュタグ、コンテストハッシュタグ、ユーザーハッシュタグ、問題名、提出結果、得点を表示します。
 
-問題ハッシュタグ、コンテストハッシュタグを検索するボタンを追加します。
+問題ハッシュタグ、コンテストハッシュタグをツイッターで検索するボタンを追加します。
 
 ## ハッシュタグ
 
