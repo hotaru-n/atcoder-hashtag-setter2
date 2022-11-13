@@ -3,22 +3,12 @@
   "tasks": [
     {
       "type": "npm",
-      "script": "build",
+      "script": "bundle:watch",
       "group": "build",
       "problemMatcher": [],
-      "label": "npm: build",
-      "detail": "tsc"
-    },
-    {
-      "type": "npm",
-      "script": "watch",
-      "group": "build",
-      "problemMatcher": [],
-      "label": "npm: watch",
-      "detail": "tsc -w",
-      "runOptions": {
-        "runOn": "folderOpen"
-      }
+      "label": "npm: bundle:watch",
+      "detail": "rollup -c -w",
+      "runOptions": { "runOn": "folderOpen" }
     }
   ]
 }
