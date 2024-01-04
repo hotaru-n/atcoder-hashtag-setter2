@@ -1,8 +1,8 @@
 {
   "name": "atcoder-hashtag-setter2",
   "private": true,
-  "version": "0.0.0",
-  "description": "TODO",
+  "version": "3.0.0",
+  "description": "AtCoder の共有ボタンの埋め込みテキストにハッシュタグを追加して、コンテスト名または問題名を補完して、ハッシュタグを X で検索するボタンを追加します。",
   "type": "module",
   "license": "MIT",
   "scripts": {

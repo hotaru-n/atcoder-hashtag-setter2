@@ -1,10 +1,11 @@
 # AtCoder HashTag Setter2
 
-AtCoder のツイートボタンの埋め込みテキストにハッシュタグ + etc を追加します。
+AtCoder の共有ボタンの埋め込みテキストにハッシュタグを追加して、コンテスト名または問題名を補完して、ハッシュタグを X で検索するボタンを追加します。
 
-問題ハッシュタグ、コンテストハッシュタグ、ユーザーハッシュタグ、問題名、提出結果、得点を表示します。
+問題ハッシュタグ、コンテストハッシュタグ、ユーザーハッシュタグの 3 タグを追加します。
+さらに埋め込みテキストにコンテスト名または問題名が無いページがあるので、それを追加します。
 
-問題ハッシュタグ、コンテストハッシュタグをツイッターで検索するボタンを追加します。
+ハッシュタグを X で検索するボタンを追加します。
 
 ## ハッシュタグ
 
@@ -16,23 +17,28 @@ AtCoder のツイートボタンの埋め込みテキストにハッシュタグ
 
 ### 問題ページ
 
-```text
-A - Cabbages - AtCoder Beginner Contest 210 #AtCoder_abc210_a #AtCoder_abc210 #AtCoder_machikane
+```diff
+-A - Cabbages
++A - Cabbages - AtCoder Beginner Contest 210 #AtCoder_abc210_a #AtCoder_abc210
 ```
 
 ### 提出詳細ページ
 
-```text
-A - Cabbages - machikaneの提出 - 結果 AC 100点 - AtCoder Beginner Contest 210 #AtCoder_abc210_a #AtCoder_abc210 #AtCoder_machikane
+```diff
+-提出 #49012776 - AtCoder Beginner Contest 210
++提出 #49012776 - AtCoder Beginner Contest 210 - A - Cabbages #AtCoder_abc210_a #AtCoder_abc210 #AtCoder_machikane
 ```
 
 ### その他のページ
 
-```text
-順位表 - AtCoder Beginner Contest 210 #AtCoder_abc210
+```diff
+-順位表 - AtCoder Beginner Contest 210
++順位表 - AtCoder Beginner Contest 210 #AtCoder_abc210
 ```
 
 ## 真似した拡張機能・ユーザースクリプト
+
+アイデアのみ真似ました。
 
 [AtCoder HashTag Setter](https://greasyfork.org/ja/scripts/422324-atcoder-hashtag-setter)
 
