@@ -19,14 +19,14 @@ AtCoder の共有ボタンの埋め込みテキストにハッシュタグを追
 
 ```diff
 -A - Cabbages
-+A - Cabbages - AtCoder Beginner Contest 210 #AtCoder_abc210_a #AtCoder_abc210
++A - Cabbages - AtCoder Beginner Contest 210 #AtCoder_abc210 #AtCoder_abc210_a
 ```
 
 ### 提出詳細ページ
 
 ```diff
 -提出 #49012776 - AtCoder Beginner Contest 210
-+提出 #49012776 - AtCoder Beginner Contest 210 - A - Cabbages #AtCoder_abc210_a #AtCoder_abc210 #AtCoder_machikane
++提出 #49012776 - AtCoder Beginner Contest 210 - A - Cabbages #AtCoder_abc210 #AtCoder_abc210_a #AtCoder_machikane
 ```
 
 ### その他のページ
